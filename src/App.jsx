@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Autoplay } from "swiper/modules";
+import { Navigation, Autoplay, Keyboard, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/autoplay";
+import "swiper/css/pagination";
 
 // Thêm thư viện AOS và CSS của nó để tạo hiệu ứng khi cuộn trang
 import AOS from 'aos';
@@ -32,20 +33,22 @@ const handleScroll = (e, targetId) => {
   }
 };
 
-// Component Modal hiển thị ảnh phóng to với hiệu ứng chuyển đổi mượt mà
-function ImageModal({ imageUrl, onClose }) {
+// Component Modal hiển thị ảnh phóng to với Swiper
+function ImageModal({ modalData, onClose }) {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    if (imageUrl) {
+    if (modalData) {
       const timer = setTimeout(() => setShow(true), 50);
       return () => clearTimeout(timer);
     } else {
       setShow(false);
     }
-  }, [imageUrl]);
+  }, [modalData]);
 
-  if (!imageUrl) return null;
+  if (!modalData) return null;
+
+  const { images, initialIndex } = modalData;
 
   return (
     <div
@@ -53,13 +56,33 @@ function ImageModal({ imageUrl, onClose }) {
       onClick={onClose}
     >
       <div
-        className={`relative max-w-3xl max-h-[90vh] bg-white p-2 rounded-lg shadow-lg flex justify-center items-center transform transition-transform duration-300 ${show ? 'scale-100' : 'scale-95'}`}
+        className={`relative w-full max-w-3xl h-[90vh] bg-white p-2 rounded-lg shadow-lg flex justify-center items-center transform transition-transform duration-300 ${show ? 'scale-100' : 'scale-95'}`}
         onClick={(e) => e.stopPropagation()}
       >
-        <img src={imageUrl} alt="Phóng to" className="max-w-full max-h-[85vh] object-contain rounded-md" />
+        <Swiper
+          modules={[Navigation, Keyboard, Pagination]}
+          initialSlide={initialIndex}
+          navigation
+          keyboard={{ enabled: true }}
+          pagination={{ clickable: true }}
+          spaceBetween={10}
+          slidesPerView={1}
+          loop={false}
+          className="w-full h-full"
+        >
+          {images.map((img, i) => (
+            <SwiperSlide key={i} className="flex items-center justify-center">
+              <img
+                src={img}
+                alt={`Phóng to ${i + 1}`}
+                className="max-w-full max-h-[85vh] object-contain rounded-md"
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 text-white bg-red-600 rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold"
+          className="absolute top-2 right-2 text-white bg-red-600 rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold z-10"
         >
           &times;
         </button>
@@ -88,7 +111,7 @@ function ServiceSlider({ title, images, id, openModal }) {
             <SwiperSlide key={i}>
               <div
                 className="flex items-center justify-center p-4 bg-white shadow rounded-lg cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:shadow-xl"
-                onClick={() => openModal(img)}
+                onClick={() => openModal(images, i)}
               >
                 <img
                   src={img}
@@ -106,16 +129,16 @@ function ServiceSlider({ title, images, id, openModal }) {
 }
 
 function App() {
-  const [modalImageUrl, setModalImageUrl] = useState(null);
+  const [modalData, setModalData] = useState(null);
 
-  const openImageModal = (imageUrl) => {
-    setModalImageUrl(imageUrl);
+  const openImageModal = (images, initialIndex) => {
+    setModalData({ images, initialIndex });
   };
 
   const closeImageModal = () => {
-    setModalImageUrl(null);
+    setModalData(null);
   };
-  
+
   // Khởi tạo AOS khi component được render lần đầu
   useEffect(() => {
     AOS.init({
@@ -363,7 +386,7 @@ function App() {
       </footer>
 
       {/* Modal hiển thị ảnh phóng to */}
-      <ImageModal imageUrl={modalImageUrl} onClose={closeImageModal} />
+      <ImageModal modalData={modalData} onClose={closeImageModal} />
     </div>
   );
 }
