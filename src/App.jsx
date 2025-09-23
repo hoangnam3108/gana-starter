@@ -35,28 +35,17 @@ const handleScroll = (e, targetId) => {
 
 // Component Modal hiển thị ảnh phóng to với Swiper
 function ImageModal({ modalData, onClose }) {
-  const [show, setShow] = useState(false);
-
-  useEffect(() => {
-    if (modalData) {
-      const timer = setTimeout(() => setShow(true), 50);
-      return () => clearTimeout(timer);
-    } else {
-      setShow(false);
-    }
-  }, [modalData]);
-
   if (!modalData) return null;
 
   const { images, initialIndex } = modalData;
 
   return (
     <div
-      className={`fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4 transition-opacity duration-300 ${show ? 'opacity-100' : 'opacity-0'}`}
+      className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4 transition-opacity duration-300 opacity-100"
       onClick={onClose}
     >
       <div
-        className={`relative w-full max-w-3xl h-[90vh] bg-white p-2 rounded-lg shadow-lg flex justify-center items-center transform transition-transform duration-300 ${show ? 'scale-100' : 'scale-95'}`}
+        className="relative w-full max-w-3xl h-[90vh] bg-white p-2 rounded-lg shadow-lg flex justify-center items-center transform transition-transform duration-300 scale-100"
         onClick={(e) => e.stopPropagation()}
       >
         <Swiper
@@ -143,7 +132,7 @@ function App() {
   useEffect(() => {
     AOS.init({
       duration: 1000, // Thời gian hiệu ứng (1000ms = 1s)
-      once: true,    // Chỉ chạy hiệu ứng một lần khi cuộn đến
+      once: false,    // Thay đổi từ 'true' sang 'false' để hiệu ứng chạy lại khi cuộn
     });
   }, []);
 

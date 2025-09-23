@@ -32,7 +32,6 @@ export const logoImages = [
   "/logos/logo23.webp",
   "/logos/logo24.webp",
   "/logos/logo25.webp",
-  "/logos/logo26.webp",
 ];
 
 // Dữ liệu cho Thiết kế Banner, Poster, Standee...
