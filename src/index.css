@@ -5,3 +5,15 @@
 body {
   margin: 0;
 }
+#running-title {
+  animation: runningText 15s linear infinite;
+}
+
+@keyframes runningText {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}

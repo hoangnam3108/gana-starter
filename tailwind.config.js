@@ -1,24 +1,16 @@
-export default {
-  content: ["./index.html", "./src/**/*.{js,jsx}"],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-}
-
+// tailwind.config.js
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
-      colors: {
-        'gana-orange': '#F26322', // Đặt tên 'gana-orange' cho mã màu
+      padding: {
+        '9/16': '56.25%', // Tỷ lệ 16:9
       },
     },
   },
   plugins: [],
 }
-
-
