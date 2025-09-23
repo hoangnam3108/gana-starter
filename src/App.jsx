@@ -150,6 +150,21 @@ function App() {
     });
   }, []);
 
+  // Vô hiệu hóa cuộn trang khi modal mở
+  useEffect(() => {
+    if (modalData) {
+      document.body.classList.add('overflow-hidden');
+    } else {
+      document.body.classList.remove('overflow-hidden');
+    }
+  
+    // Clean-up function để đảm bảo class được gỡ bỏ khi component unmount
+    return () => {
+      document.body.classList.remove('overflow-hidden');
+    };
+  }, [modalData]);
+  
+
   return (
     <div className="font-sans">
       {/* Header */}
