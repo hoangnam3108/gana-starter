@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, Keyboard, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/autoplay";
 import "swiper/css/pagination";
+
+// Thêm thư viện AOS và CSS của nó để tạo hiệu ứng khi cuộn trang
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 // Nhập dữ liệu từ file contentData.js
 import {
@@ -79,7 +83,7 @@ function ImageModal({ modalData, onClose }) {
 // Component Slider Dịch vụ đã được cập nhật với hiệu ứng hover
 function ServiceSlider({ title, images, id, openModal }) {
   return (
-    <section id={id} className="py-12 bg-gray-100">
+    <section id={id} className="py-12 bg-gray-100" data-aos="fade-up">
       <div className="max-w-6xl mx-auto px-4">
         <div className="bg-[#ff5733] text-white py-3 px-6 mb-6 rounded-lg text-center font-bold text-2xl uppercase">
           {title}
@@ -87,10 +91,24 @@ function ServiceSlider({ title, images, id, openModal }) {
         <Swiper
           modules={[Navigation, Autoplay]}
           spaceBetween={20}
-          slidesPerView={5}
+          slidesPerView={2} // Mặc định cho di động
           navigation
           loop
           autoplay={{ delay: 3000, disableOnInteraction: false }}
+          breakpoints={{
+            640: {
+              slidesPerView: 3,
+              spaceBetween: 15,
+            },
+            768: {
+              slidesPerView: 4,
+              spaceBetween: 20,
+            },
+            1024: {
+              slidesPerView: 5,
+              spaceBetween: 20,
+            },
+          }}
         >
           {images.map((img, i) => (
             <SwiperSlide key={i}>
@@ -124,6 +142,14 @@ function App() {
     setModalData(null);
   };
 
+  // Khởi tạo AOS khi component được render lần đầu
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // Thời gian hiệu ứng (1000ms = 1s)
+      once: true,    // Hiệu ứng chỉ chạy một lần khi cuộn đến
+    });
+  }, []);
+
   return (
     <div className="font-sans">
       {/* Header */}
@@ -137,7 +163,7 @@ function App() {
             <a href="#home" onClick={(e) => handleScroll(e, "home")} className="text-white hover:text-gray-200">
               Trang chủ
             </a>
-            <a href="#about" onClick={(e) => handleScroll(e, "about")} className="text-white hover:text-gray-200">
+            <a href="#about" onClick={(e) => handleScroll(e, "about")} className="text-white hover:text-gray-200 hidden md:block">
               Giới thiệu
             </a>
 
@@ -186,7 +212,7 @@ function App() {
             </div>
 
             {/* Liên kết Blog đã loại bỏ dropdown */}
-            <a href="#blog" onClick={(e) => handleScroll(e, "blog")} className="text-white hover:text-gray-200">
+            <a href="#blog" onClick={(e) => handleScroll(e, "blog")} className="text-white hover:text-gray-200 hidden md:block">
               Blog
             </a>
 
@@ -223,12 +249,12 @@ function App() {
       </section>
 
       {/* Giới thiệu */}
-      <section id="about" className="py-12 max-w-6xl mx-auto px-4">
+      <section id="about" className="py-12 max-w-6xl mx-auto px-4" data-aos="fade-up">
         <div className="flex flex-col items-center">
-          <h1 className="text-4xl font-extrabold text-[#ff5733] text-center mb-4 transform transition-all duration-500 hover:scale-105 hover:text-[#e64a19]">
+          <h1 className="text-4xl font-extrabold text-[#ff5733] text-center mb-4 transform transition-all duration-500 hover:scale-105 hover:text-[#e64a19] text-2xl sm:text-3xl lg:text-4xl">
             CHÚNG TÔI KIẾN TẠO GIÁ TRỊ THIẾT KẾ
           </h1>
-          <p className="text-xl text-gray-700 text-center max-w-3xl mb-8">
+          <p className="text-xl text-gray-700 text-center max-w-3xl mb-8 text-base sm:text-lg">
             Tại Gana Design, chúng tôi không ngừng sáng tạo để biến ý tưởng của bạn thành những ấn phẩm thiết kế đầy ấn tượng. Chúng tôi tin rằng mỗi chi tiết đều mang một câu chuyện riêng, và nhiệm vụ của chúng tôi là làm cho những câu chuyện ấy trở nên sống động, chuyên nghiệp và có giá trị bền vững.
           </p>
         </div>
@@ -275,7 +301,7 @@ function App() {
         <div className="flex flex-col lg:flex-row gap-8">
 
           {/* Phần Đăng ký tư vấn */}
-          <div id="register" className="w-full lg:w-1/2">
+          <div id="register" className="w-full lg:w-1/2" data-aos="fade-right">
             <div className="bg-[#ff5733] p-8 rounded-lg shadow-xl">
               <h2 className="text-2xl font-bold text-white text-left mb-6">Đăng ký tư vấn</h2>
               <form className="space-y-4" action="https://formspree.io/f/meorjqjg" method="POST">
@@ -312,7 +338,7 @@ function App() {
                 <div>
                   <button
                     type="submit"
-                    className="w-full px-6 py-3 border-2 border-white text-base font-medium rounded-md text-white bg-transparent hover:bg-white hover:text-[#ff5733] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition-all duration-300 transform hover:scale-105"
+                    className="w-full px-6 py-3 border-2 border-white text-base font-medium rounded-md text-white bg-transparent hover:bg-white hover:text-[#ff5733] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
                   >
                     Đăng ký tư vấn
                   </button>
@@ -322,7 +348,7 @@ function App() {
           </div>
 
           {/* Phần Blog */}
-          <div id="blog" className="w-full lg:w-1/2">
+          <div id="blog" className="w-full lg:w-1/2" data-aos="fade-left">
             <h2 className="text-2xl font-bold mb-6">Tin tức & Bài viết</h2>
             <Swiper
               modules={[Navigation, Autoplay]}
@@ -333,7 +359,7 @@ function App() {
             >
               {blogArticles.map((article, i) => (
                 <SwiperSlide key={i}>
-                  <div className="bg-white p-6 rounded-lg shadow-md">
+                  <div className="bg-white p-6 rounded-lg shadow-md transform transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl">
                     <img src={article.image} alt={article.title} className="w-full h-40 object-cover mb-4 rounded-md" loading="lazy" />
                     <h3 className="text-lg font-semibold mb-2">{article.title}</h3>
                     <p className="text-gray-600 text-sm">{article.summary}</p>
@@ -350,7 +376,7 @@ function App() {
       </section>
 
       {/* Footer */}
-      <footer id="footer-contact" className="bg-gray-900 text-white py-8 mt-12">
+      <footer id="footer-contact" className="bg-gray-900 text-white py-8 mt-12" data-aos="fade-up">
         <div className="max-w-6xl mx-auto px-4 text-center">
           <p className="mb-2">
             Liên hệ: <a href="mailto:hoangnam.natr@gmail.com" className="text-white hover:text-gray-200">
