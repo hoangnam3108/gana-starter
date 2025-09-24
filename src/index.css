@@ -1,6 +1,6 @@
 html {
-  /* Kích hoạt smooth scrolling trên toàn bộ trang */
-  scroll-behavior: smooth;
+  /* Đã loại bỏ smooth scroll CSS để tăng tính ổn định trên mọi trình duyệt */
+  /* scroll-behavior: smooth; */
 }
 
 @tailwind base;
@@ -9,7 +9,6 @@ html {
 
 body {
   margin: 0;
-  /* Đặt nền trắng cho body */
   background-color: #ffffff; 
 }
 

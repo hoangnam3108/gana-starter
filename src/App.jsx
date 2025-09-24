@@ -18,7 +18,7 @@ import {
   blogArticles
 } from "./contentData.js";
 
-// Đã loại bỏ hàm xử lý cuộn trang để sử dụng tính năng smooth scrolling tự nhiên của trình duyệt
+// Đã loại bỏ hàm xử lý cuộn trang để sử dụng tính năng cuộn mặc định của trình duyệt
 
 // Component Modal hiển thị ảnh phóng to với Swiper (Ổn định)
 function ImageModal({ modalData, onClose }) {
@@ -67,7 +67,7 @@ function ImageModal({ modalData, onClose }) {
   );
 }
 
-// Component Slider Dịch vụ (Đã loại bỏ Autoplay)
+// Component Slider Dịch vụ
 function ServiceSlider({ title, images, id, openModal }) {
   const hasEnoughSlides = images.length >= 5;
 
@@ -83,7 +83,7 @@ function ServiceSlider({ title, images, id, openModal }) {
           slidesPerView={2}
           navigation
           loop={hasEnoughSlides}
-          // ĐÃ LOẠI BỎ AUTOPLAY ĐỂ TĂNG ỔN ĐỊNH
+          // ĐÃ LOẠI BỎ AUTOPLAY
           breakpoints={{
             640: {
               slidesPerView: 3,
@@ -215,7 +215,7 @@ function App() {
         </div>
       </header>
 
-      {/* Trang chủ - Banner (Đã loại bỏ Autoplay) */}
+      {/* Trang chủ - Banner */}
       <section id="home" className="relative h-48 sm:h-64 lg:h-96">
         <Swiper
           modules={[Navigation, Autoplay]}
@@ -253,7 +253,7 @@ function App() {
         </div>
       </section>
 
-      {/* Các Slider Dịch vụ (Đã loại bỏ Autoplay) */}
+      {/* Các Slider Dịch vụ */}
       <ServiceSlider
         title="Thiết kế Logo"
         id="logo-design"
@@ -289,7 +289,7 @@ function App() {
         openModal={openImageModal}
       />
 
-      {/* Phần Đăng ký tư vấn và Blog (Đã loại bỏ Autoplay) */}
+      {/* Phần Đăng ký tư vấn và Blog */}
       <section className="py-12 max-w-6xl mx-auto px-4">
         <div className="flex flex-col lg:flex-row gap-8">
 
