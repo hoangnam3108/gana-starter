@@ -7,8 +7,6 @@ import "swiper/css/autoplay";
 import "swiper/css/pagination";
 
 // Đã loại bỏ thư viện AOS để cải thiện hiệu suất
-// import AOS from 'aos';
-// import 'aos/dist/aos.css';
 
 import {
   bannerImages,
@@ -22,9 +20,10 @@ import {
 
 // Đã loại bỏ hàm xử lý cuộn trang để sử dụng tính năng smooth scrolling tự nhiên của trình duyệt
 
-// Component Modal hiển thị ảnh phóng to với Swiper (Đã loại bỏ logic vuốt tùy chỉnh)
+// Component Modal hiển thị ảnh phóng to với Swiper (Ổn định)
 function ImageModal({ modalData, onClose }) {
   if (!modalData) return null;
+
   const { images, initialIndex } = modalData;
 
   return (
@@ -68,7 +67,7 @@ function ImageModal({ modalData, onClose }) {
   );
 }
 
-// Component Slider Dịch vụ
+// Component Slider Dịch vụ (Đã loại bỏ Autoplay)
 function ServiceSlider({ title, images, id, openModal }) {
   const hasEnoughSlides = images.length >= 5;
 
@@ -84,7 +83,7 @@ function ServiceSlider({ title, images, id, openModal }) {
           slidesPerView={2}
           navigation
           loop={hasEnoughSlides}
-          autoplay={{ delay: 3000, disableOnInteraction: false }}
+          // ĐÃ LOẠI BỎ AUTOPLAY ĐỂ TĂNG ỔN ĐỊNH
           breakpoints={{
             640: {
               slidesPerView: 3,
@@ -216,13 +215,12 @@ function App() {
         </div>
       </header>
 
-      {/* Trang chủ - Banner */}
+      {/* Trang chủ - Banner (Đã loại bỏ Autoplay) */}
       <section id="home" className="relative h-48 sm:h-64 lg:h-96">
         <Swiper
           modules={[Navigation, Autoplay]}
           navigation
           loop={bannerImages.length > 1}
-          autoplay={{ delay: 3000, disableOnInteraction: false }}
           slidesPerView={1}
           className="absolute top-0 left-0 w-full h-full"
         >
@@ -255,7 +253,7 @@ function App() {
         </div>
       </section>
 
-      {/* Các Slider Dịch vụ */}
+      {/* Các Slider Dịch vụ (Đã loại bỏ Autoplay) */}
       <ServiceSlider
         title="Thiết kế Logo"
         id="logo-design"
@@ -291,7 +289,7 @@ function App() {
         openModal={openImageModal}
       />
 
-      {/* Phần Đăng ký tư vấn và Blog */}
+      {/* Phần Đăng ký tư vấn và Blog (Đã loại bỏ Autoplay) */}
       <section className="py-12 max-w-6xl mx-auto px-4">
         <div className="flex flex-col lg:flex-row gap-8">
 
@@ -352,7 +350,6 @@ function App() {
               modules={[Navigation, Autoplay]}
               navigation
               loop={blogArticles.length > 1}
-              autoplay={{ delay: 3000, disableOnInteraction: false }}
               slidesPerView={1}
             >
               {blogArticles.map((article, i) => (
