@@ -1,4 +1,5 @@
 html {
+  /* Kích hoạt smooth scrolling trên toàn bộ trang */
   scroll-behavior: smooth;
 }
 
@@ -8,6 +9,8 @@ html {
 
 body {
   margin: 0;
+  /* Đặt nền trắng cho body */
+  background-color: #ffffff; 
 }
 
 #running-title {
