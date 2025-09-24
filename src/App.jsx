@@ -38,11 +38,31 @@ function ImageModal({ modalData, onClose }) {
   if (!modalData) return null;
 
   const { images, initialIndex } = modalData;
+  const [touchStartY, setTouchStartY] = useState(0);
+
+  // Xử lý khi bắt đầu vuốt
+  const handleTouchStart = (e) => {
+    setTouchStartY(e.touches[0].clientY);
+  };
+
+  // Xử lý khi kết thúc vuốt
+  const handleTouchEnd = (e) => {
+    const touchEndY = e.changedTouches[0].clientY;
+    const swipeDistance = touchEndY - touchStartY;
+    const swipeThreshold = 100; // Ngưỡng vuốt xuống để đóng modal (100px)
+
+    // Kiểm tra nếu vuốt xuống đủ xa thì đóng modal
+    if (swipeDistance > swipeThreshold) {
+      onClose();
+    }
+  };
 
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4 transition-opacity duration-300 opacity-100"
       onClick={onClose}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       <div
         className="relative w-full max-w-3xl h-[90vh] bg-white p-2 rounded-lg shadow-lg flex justify-center items-center transform transition-transform duration-300 scale-100"
@@ -82,6 +102,9 @@ function ImageModal({ modalData, onClose }) {
 
 // Component Slider Dịch vụ đã được cập nhật với hiệu ứng hover
 function ServiceSlider({ title, images, id, openModal }) {
+  // Bật loop chỉ khi số lượng slide đủ để lặp
+  const hasEnoughSlides = images.length >= 5;
+
   return (
     <section id={id} className="py-12 bg-gray-100" data-aos="fade-up">
       <div className="max-w-6xl mx-auto px-4">
@@ -93,7 +116,7 @@ function ServiceSlider({ title, images, id, openModal }) {
           spaceBetween={20}
           slidesPerView={2} // Mặc định cho di động
           navigation
-          loop
+          loop={hasEnoughSlides}
           autoplay={{ delay: 3000, disableOnInteraction: false }}
           breakpoints={{
             640: {
@@ -142,36 +165,34 @@ function App() {
     setModalData(null);
   };
 
-  // Khởi tạo AOS khi component được render lần đầu
   useEffect(() => {
     AOS.init({
-      duration: 1000, // Thời gian hiệu ứng (1000ms = 1s)
-      once: true,    // Hiệu ứng chỉ chạy một lần khi cuộn đến
+      duration: 1000,
+      once: true,
     });
   }, []);
 
-  // Vô hiệu hóa cuộn trang khi modal mở
   useEffect(() => {
     if (modalData) {
       document.body.classList.add('overflow-hidden');
     } else {
       document.body.classList.remove('overflow-hidden');
     }
-
-    // Clean-up function để đảm bảo class được gỡ bỏ khi component unmount
+  
     return () => {
       document.body.classList.remove('overflow-hidden');
     };
   }, [modalData]);
+  
 
   return (
-    <div className="font-sans">
+    <div className="font-sans overflow-x-hidden">
       {/* Header */}
       <header className="bg-[#ff5733] shadow sticky top-0 z-50">
         <div className="max-w-6xl mx-auto flex items-center justify-between p-4">
           <a href="/" className="flex items-center space-x-2">
             <img src="./logos/logogana.png" alt="Logo Gana Design" className="h-10 object-contain" loading="lazy" />
-            <span className="font-bold text-xl text-white">Gana Design</span>
+            <span className="font-bold text-xl text-white hidden sm:block">Gana Design</span>
           </a>
           <nav className="space-x-2 md:space-x-6 flex items-center">
             <a href="#home" onClick={(e) => handleScroll(e, "home")} className="text-white hover:text-gray-200">
@@ -186,7 +207,7 @@ function App() {
               <span className="text-white hover:text-gray-200 cursor-pointer p-4 -m-4">
                 Dịch vụ
               </span>
-              <div className="absolute top-full left-0 w-56 bg-white shadow-lg rounded-md overflow-hidden z-20 hidden group-hover:block transition-all duration-200">
+              <div className="absolute top-full right-0 md:left-0 w-56 bg-white shadow-lg rounded-md overflow-hidden z-20 hidden group-hover:block transition-all duration-200">
                 <a
                   href="#logo-design"
                   onClick={(e) => handleScroll(e, "logo-design")}
@@ -242,7 +263,7 @@ function App() {
         <Swiper
           modules={[Navigation, Autoplay]}
           navigation
-          loop
+          loop={bannerImages.length > 1} // Bật loop nếu có nhiều hơn 1 slide
           autoplay={{ delay: 3000, disableOnInteraction: false }}
           slidesPerView={1}
           className="absolute top-0 left-0 w-full h-full"
@@ -327,6 +348,7 @@ function App() {
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-white focus:ring-white p-3 text-black"
                     placeholder="Họ tên của bạn*"
                     required
+                    autoComplete="name"
                   />
                 </div>
                 <div>
@@ -337,6 +359,7 @@ function App() {
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-white focus:ring-white p-3 text-black"
                     placeholder="Số điện thoại*"
                     required
+                    autoComplete="tel"
                   />
                 </div>
                 <div>
@@ -347,6 +370,7 @@ function App() {
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-white focus:ring-white p-3 text-black"
                     placeholder="Email*"
                     required
+                    autoComplete="email"
                   />
                 </div>
                 <div>
@@ -367,7 +391,7 @@ function App() {
             <Swiper
               modules={[Navigation, Autoplay]}
               navigation
-              loop
+              loop={blogArticles.length > 1} // Bật loop nếu có nhiều hơn 1 slide
               autoplay={{ delay: 3000, disableOnInteraction: false }}
               slidesPerView={1}
             >
