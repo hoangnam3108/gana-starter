@@ -32,6 +32,10 @@ export const logoImages = [
   "./logos/logo23.webp",
   "./logos/logo24.webp",
   "./logos/logo25.webp",
+  "./logos/logo26.webp",
+  "./logos/logo27.webp",
+  "./logos/logo28.webp",
+  "./logos/logo29.webp",
 ];
 
 // Dữ liệu cho Thiết kế Banner, Poster, Standee...
@@ -60,6 +64,26 @@ export const bannersPostersStandeesImages = [
   "./posters/poster22.webp",
   "./posters/poster23.webp",
   "./posters/poster24.webp",
+  "./posters/poster25.webp",
+  "./posters/poster26.webp",
+  "./posters/poster27.webp",
+  "./posters/poster28.webp",
+  "./posters/poster29.webp",
+  "./posters/poster30.webp",
+  "./posters/poster31.webp",
+  "./posters/poster32.webp",
+  "./posters/poster33.webp",
+  "./posters/poster34.webp",
+  "./posters/poster35.webp",
+  "./posters/poster36.webp",
+  "./posters/poster37.webp",
+  "./posters/poster38.webp",
+  "./posters/poster39.webp",
+  "./posters/poster40.webp",
+  "./posters/poster41.webp",
+  "./posters/poster42.webp",
+  "./posters/poster43.webp",
+  "./posters/poster44.webp",
 ];
 
 // Dữ liệu cho thiết kế Catalogue, brochure, profile company
@@ -96,6 +120,17 @@ export const packagingDesignImages = [
   "./packaging/packaging14.webp",
   "./packaging/packaging15.webp",
   "./packaging/packaging16.webp",
+  "./packaging/packaging17.webp",
+  "./packaging/packaging18.webp",
+  "./packaging/packaging19.webp",
+  "./packaging/packaging20.webp",
+  "./packaging/packaging21.webp",
+  "./packaging/packaging22.webp",
+  "./packaging/packaging23.webp",
+  "./packaging/packaging24.webp",
+  "./packaging/packaging25.webp",
+  "./packaging/packaging26.webp",
+  "./packaging/packaging27.webp",
 ];
 
 // Dữ liệu cho Các thiết kế khác
@@ -147,7 +182,14 @@ export const otherDesignsImages = [
   "./orther-designs/des45.webp",
   "./orther-designs/des46.webp",
   "./orther-designs/des47.webp",
-  "./orther-designs/des48.webp"
+  "./orther-designs/des48.webp",
+  "./orther-designs/des49.webp",
+  "./orther-designs/des50.webp",
+  "./orther-designs/des51.webp",
+  "./orther-designs/des52.webp",
+  "./orther-designs/des53.webp",
+  "./orther-designs/des54.webp",
+  "./orther-designs/des55.webp",
 ];
 
 // Dữ liệu cho phần Blog
