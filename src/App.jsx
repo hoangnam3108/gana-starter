@@ -62,7 +62,10 @@ function ImageModal({ modalData, onClose }) {
       className="fixed inset-0 bg-white/98 flex items-center justify-center z-[100] backdrop-blur-xl" 
       onClick={onClose}
     >
-      <button onClick={onClose} className="absolute top-6 right-6 text-gray-900 hover:text-[#ff5733] p-2 z-[110] transition-all active:scale-90">
+      <button 
+        onClick={onClose} 
+        className="absolute top-6 right-6 text-gray-900 hover:text-[#ff5733] p-2 z-[110] transition-all active:scale-90"
+      >
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
         </svg>
@@ -73,7 +76,7 @@ function ImageModal({ modalData, onClose }) {
         drag="y"
         dragConstraints={{ top: 0, bottom: 0 }}
         onDragEnd={(e, info) => info.offset.y > 100 && onClose()}
-        className="relative w-full max-w-5xl h-[80vh] flex flex-col justify-center items-center px-4" 
+        className="relative w-full h-full flex flex-col justify-center items-center" 
         onClick={(e) => e.stopPropagation()}
       >
         <Swiper 
@@ -82,19 +85,23 @@ function ImageModal({ modalData, onClose }) {
           navigation={true}
           keyboard={{ enabled: true }} 
           onSlideChange={(swiper) => setCurrentIndex(swiper.realIndex + 1)}
-          spaceBetween={20} 
+          spaceBetween={0} 
           slidesPerView={1} 
           loop={true}
           className="w-full h-full"
         >
           {images.map((img, i) => (
-            <SwiperSlide key={i} className="flex items-center justify-center pointer-events-none">
-              <img src={img} alt="Full View" className="max-w-full max-h-full object-contain pointer-events-auto shadow-2xl rounded-lg" />
+            <SwiperSlide key={i} className="flex items-center justify-center w-full h-full px-4">
+              <img 
+                src={img} 
+                alt="Full View" 
+                className="max-w-full max-h-[80vh] object-contain shadow-2xl rounded-lg pointer-events-none select-none" 
+              />
             </SwiperSlide>
           ))}
         </Swiper>
 
-        <div className="absolute -bottom-16 flex flex-col items-center gap-3">
+        <div className="absolute bottom-8 flex flex-col items-center gap-3 z-[110] pointer-events-none">
           <div className="bg-gray-900 text-white px-5 py-1.5 rounded-full text-xs font-black tracking-widest shadow-lg">
             {currentIndex} / {images.length}
           </div>
@@ -106,7 +113,7 @@ function ImageModal({ modalData, onClose }) {
 }
 
 function ServiceSlider({ title, description, images, id, openModal, lightBg = true }) {
-  const displayImages = images.slice(0, 16); // Hiển thị nhiều ảnh hơn một chút ở trang chủ
+  const displayImages = images.slice(0, 16);
   return (
     <motion.section 
       id={id} 
@@ -196,14 +203,12 @@ function App() {
         </div>
       </section>
 
-      {/* Đầy đủ các mục dịch vụ */}
       <ServiceSlider title="Thiết kế Logo" id="logo-design" description="Sáng tạo biểu tượng độc bản, nâng tầm vị thế thương hiệu." images={logoImages} openModal={(imgs, idx) => setModalData({images: imgs, initialIndex: idx})} />
       <ServiceSlider title="Banner & Poster" id="banners-posters" description="Giải pháp quảng cáo chuyên nghiệp trên đa nền tảng." images={bannersPostersStandeesImages} openModal={(imgs, idx) => setModalData({images: imgs, initialIndex: idx})} lightBg={false} />
       <ServiceSlider title="Catalogue & Profile" id="catalogues-brochures" description="Hồ sơ năng lực ấn tượng, gia tăng uy tín trước đối tác." images={cataloguesBrochuresImages} openModal={(imgs, idx) => setModalData({images: imgs, initialIndex: idx})} />
       <ServiceSlider title="Thiết kế Bao bì" id="packaging-design" description="Công cụ kể câu chuyện thương hiệu và thúc đẩy doanh số." images={packagingDesignImages} openModal={(imgs, idx) => setModalData({images: imgs, initialIndex: idx})} lightBg={false} />
       <ServiceSlider title="Dịch vụ khác" id="other-designs" description="Từ danh thiếp đến bộ văn phòng, chúng tôi đáp ứng mọi nhu cầu đồ họa sáng tạo." images={otherDesignsImages} openModal={(imgs, idx) => setModalData({images: imgs, initialIndex: idx})} />
 
-      {/* Hiệu ứng Marquee */}
       <div className="py-24 bg-white overflow-hidden border-y border-gray-100 flex items-center text-gray-200 font-black text-6xl md:text-8xl">
         <div className="flex animate-marquee whitespace-nowrap space-x-32 uppercase opacity-10">
           {["THIẾT KẾ ĐỘC QUYỀN", "NÂNG TẦM THƯƠNG HIỆU", "GIẢI PHÁP SÁNG TẠO", "ĐỒNG HÀNH PHÁT TRIỂN"].map((t, i) => (
@@ -212,7 +217,6 @@ function App() {
         </div>
       </div>
 
-      {/* Blog & Articles */}
       <section id="blog" className="py-24 bg-gray-50">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex flex-col items-center mb-16 text-center">
@@ -255,7 +259,7 @@ function App() {
       </footer>
 
       <div className="fixed bottom-10 right-8 z-[90] flex flex-col space-y-4 scale-90 md:scale-100">
-        <a href="tel:0902979699" className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all active:scale-95"><svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.1 15.1 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.27c1.12.45 2.33.69 3.58.69a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.24 2.46.69 3.57a1 1 0 01-.27 1.11z" /></svg></a>
+        <a href="tel:0902979699" className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all"><svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.1 15.1 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.27c1.12.45 2.33.69 3.58.69a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.24 2.46.69 3.57a1 1 0 01-.27 1.11z" /></svg></a>
         <a href="https://zalo.me/0902979699" target="_blank" rel="noreferrer" className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all border border-blue-50"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo" className="w-10 h-10" /></a>
         <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="w-16 h-16 bg-black text-white rounded-full flex items-center justify-center shadow-2xl hover:bg-[#ff5733] transition-all"><svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 15l7-7 7 7" /></svg></button>
       </div>
