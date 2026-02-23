@@ -10,7 +10,11 @@ export const logoImages = [
   "/logos/logo11.webp", "/logos/logo12.webp", "/logos/logo13.webp", "/logos/logo14.webp", "/logos/logo15.webp",
   "/logos/logo16.webp", "/logos/logo17.webp", "/logos/logo18.webp", "/logos/logo19.webp", "/logos/logo20.webp",
   "/logos/logo21.webp", "/logos/logo22.webp", "/logos/logo23.webp", "/logos/logo24.webp", "/logos/logo25.webp",
-  "/logos/logo26.webp", "/logos/logo27.webp", "/logos/logo28.webp", "/logos/logo29.webp",
+  "/logos/logo26.webp", "/logos/logo27.webp", "/logos/logo28.webp", "/logos/logo29.webp", "/logos/logo30.webp",
+  "/logos/logo31.webp", "/logos/logo32.webp", "/logos/logo33.webp", "/logos/logo34.webp", "/logos/logo35.webp",
+  "/logos/logo36.webp", "/logos/logo37.webp", "/logos/logo38.webp", "/logos/logo39.webp", "/logos/logo40.webp",
+  "/logos/logo41.webp", "/logos/logo42.webp", "/logos/logo43.webp", "/logos/logo44.webp", "/logos/logo45.webp",
+  "/logos/logo46.webp", "/logos/logo47.webp"
 ];
 
 export const bannersPostersStandeesImages = [
@@ -21,14 +25,16 @@ export const bannersPostersStandeesImages = [
   "/posters/poster21.webp", "/posters/poster22.webp", "/posters/poster23.webp", "/posters/poster24.webp", "/posters/poster25.webp",
   "/posters/poster26.webp", "/posters/poster27.webp", "/posters/poster28.webp", "/posters/poster29.webp", "/posters/poster30.webp",
   "/posters/poster31.webp", "/posters/poster32.webp", "/posters/poster33.webp", "/posters/poster34.webp", "/posters/poster35.webp",
-  "/posters/poster36.webp", "/posters/poster37.webp", "/posters/poster38.webp", "/posters/poster39.webp", "/posters/poster40.webp",
-  "/posters/poster41.webp", "/posters/poster42.webp", "/posters/poster43.webp", "/posters/poster44.webp",
+  "/posters/poster36.webp", "/posters/poster37.webp"
 ];
 
 export const cataloguesBrochuresImages = [
   "/brochures/brochure1.webp", "/brochures/brochure2.webp", "/brochures/brochure3.webp", "/brochures/brochure4.webp",
   "/brochures/brochure5.webp", "/brochures/brochure6.webp", "/brochures/brochure7.webp", "/brochures/brochure8.webp",
   "/brochures/brochure9.webp", "/brochures/brochure10.webp", "/brochures/brochure11.webp", "/brochures/brochure12.webp",
+  "/brochures/brochure13.webp", "/brochures/brochure14.webp", "/brochures/brochure15.webp", "/brochures/brochure16.webp",
+  "/brochures/brochure17.webp", "/brochures/brochure18.webp", "/brochures/brochure19.webp", "/brochures/brochure20.webp",
+  "/brochures/brochure21.webp"
 ];
 
 export const packagingDesignImages = [
@@ -37,7 +43,7 @@ export const packagingDesignImages = [
   "/packaging/packaging11.webp", "/packaging/packaging12.webp", "/packaging/packaging13.webp", "/packaging/packaging14.webp", "/packaging/packaging15.webp",
   "/packaging/packaging16.webp", "/packaging/packaging17.webp", "/packaging/packaging18.webp", "/packaging/packaging19.webp", "/packaging/packaging20.webp",
   "/packaging/packaging21.webp", "/packaging/packaging22.webp", "/packaging/packaging23.webp", "/packaging/packaging24.webp", "/packaging/packaging25.webp",
-  "/packaging/packaging26.webp", "/packaging/packaging27.webp",
+  "/packaging/packaging26.webp"
 ];
 
 export const otherDesignsImages = [
@@ -48,10 +54,7 @@ export const otherDesignsImages = [
   "/orther-designs/des21.webp", "/orther-designs/des22.webp", "/orther-designs/des23.webp", "/orther-designs/des24.webp", "/orther-designs/des25.webp",
   "/orther-designs/des26.webp", "/orther-designs/des27.webp", "/orther-designs/des28.webp", "/orther-designs/des29.webp", "/orther-designs/des30.webp",
   "/orther-designs/des31.webp", "/orther-designs/des32.webp", "/orther-designs/des33.webp", "/orther-designs/des34.webp", "/orther-designs/des35.webp",
-  "/orther-designs/des36.webp", "/orther-designs/des37.webp", "/orther-designs/des38.webp", "/orther-designs/des39.webp", "/orther-designs/des40.webp",
-  "/orther-designs/des41.webp", "/orther-designs/des42.webp", "/orther-designs/des43.webp", "/orther-designs/des44.webp", "/orther-designs/des45.webp",
-  "/orther-designs/des46.webp", "/orther-designs/des47.webp", "/orther-designs/des48.webp", "/orther-designs/des49.webp", "/orther-designs/des50.webp",
-  "/orther-designs/des51.webp", "/orther-designs/des52.webp", "/orther-designs/des53.webp", "/orther-designs/des54.webp", "/orther-designs/des55.webp",
+  "/orther-designs/des36.webp", "/orther-designs/des37.webp", "/orther-designs/des38.webp"
 ];
 
 export const blogArticles = [
