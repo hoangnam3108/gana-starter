@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@studio-freight/lenis": "^1.0.42",
     "aos": "^2.3.4",
     "framer-motion": "^12.34.3",
     "react": "^18.2.0",

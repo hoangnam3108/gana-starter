@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, Keyboard } from "swiper/modules"; 
 import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
+import Lenis from '@studio-freight/lenis';
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -39,13 +40,13 @@ function SmartImage({ src, alt, className }) {
         alt={alt || "Thiết kế đồ họa chuyên nghiệp - Gana Design"}
         onLoad={() => setLoaded(true)}
         loading="lazy"
-        className={`${className} transition-all duration-1000 ${loaded ? 'opacity-100 scale-100 blur-0' : 'opacity-0 scale-110 blur-md'}`}
+        decoding="async"
+        className={`${className} transition-all duration-1000 ${loaded ? 'opacity-100 scale-100' : 'opacity-0 scale-110 blur-md'}`}
       />
     </div>
   );
 }
 
-// MODAL MỚI: Thêm tính năng vuốt xuống để thoát
 function ImageModal({ modalData, onClose }) {
   if (!modalData) return null;
   const { images, initialIndex } = modalData;
@@ -57,7 +58,7 @@ function ImageModal({ modalData, onClose }) {
   return (
     <motion.div 
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/98 flex items-center justify-center z-[100] p-4 backdrop-blur-md" 
+      className="fixed inset-0 bg-white/95 flex items-center justify-center z-[100] p-4 backdrop-blur-md" 
       onClick={onClose}
     >
       <motion.div 
@@ -68,22 +69,31 @@ function ImageModal({ modalData, onClose }) {
         className="relative w-full max-w-5xl h-[85vh] flex justify-center items-center touch-none" 
         onClick={(e) => e.stopPropagation()}
       >
-        <Swiper modules={[Navigation, Keyboard]} initialSlide={initialIndex} navigation keyboard={{ enabled: true }} spaceBetween={10} slidesPerView={1} className="w-full h-full">
+        {/* Swiper đã được thêm loop={true} để xem vô hạn */}
+        <Swiper 
+          modules={[Navigation, Keyboard]} 
+          initialSlide={initialIndex} 
+          navigation 
+          keyboard={{ enabled: true }} 
+          spaceBetween={10} 
+          slidesPerView={1} 
+          loop={true} 
+          className="w-full h-full"
+        >
           {images.map((img, i) => (
             <SwiperSlide key={i} className="flex items-center justify-center pointer-events-none">
               <img src={img} alt="Full View Portfolio" className="max-w-full max-h-full object-contain pointer-events-auto" />
             </SwiperSlide>
           ))}
         </Swiper>
-        <button onClick={onClose} className="absolute top-4 right-4 text-white/50 hover:text-[#ff5733] text-5xl transition-colors z-[110]">✕</button>
-        <div className="absolute -bottom-10 left-0 right-0 text-center text-white/30 text-[10px] uppercase tracking-widest">Vuốt xuống để thoát</div>
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-[#ff5733] text-5xl transition-colors z-[110]">✕</button>
+        <div className="absolute -bottom-10 left-0 right-0 text-center text-gray-400 text-[10px] uppercase tracking-widest font-bold">Vuốt xuống để thoát</div>
       </motion.div>
     </motion.div>
   );
 }
 
 function ServiceSlider({ title, description, images, id, openModal, lightBg = true }) {
-  // GIỚI HẠN ẢNH: Chỉ load 12 ảnh đầu tiên để cứu RAM cho iPhone
   const displayImages = images.slice(0, 12);
 
   return (
@@ -92,7 +102,7 @@ function ServiceSlider({ title, description, images, id, openModal, lightBg = tr
       variants={sectionVariants}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-100px" }}
+      viewport={{ once: true, margin: "-50px" }}
       className={`py-28 ${lightBg ? 'bg-white' : 'bg-[#fafafa]'}`}
     >
       <div className="max-w-6xl mx-auto px-4"> 
@@ -134,6 +144,38 @@ function App() {
   const [modalData, setModalData] = useState(null);
 
   useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    const handleAnchorClick = (e) => {
+      const target = e.target.closest('a');
+      if (target && target.hash && target.origin === window.location.origin) {
+        e.preventDefault();
+        const element = document.querySelector(target.hash);
+        if (element) {
+          lenis.scrollTo(element, { offset: -80 });
+        }
+      }
+    };
+
+    document.addEventListener('click', handleAnchorClick);
+
+    return () => {
+      lenis.destroy();
+      document.removeEventListener('click', handleAnchorClick);
+    };
+  }, []);
+
+  useEffect(() => {
     document.body.style.overflow = modalData ? 'hidden' : 'unset';
   }, [modalData]);
 
@@ -141,17 +183,15 @@ function App() {
     <div className="font-sans text-gray-900 selection:bg-[#ff5733] selection:text-white overflow-x-hidden antialiased">
       <h1 className="sr-only">Gana Design - Dịch vụ thiết kế Logo và Bộ nhận diện thương hiệu chuyên nghiệp</h1>
 
-      <header className="fixed top-0 inset-x-0 z-[60] bg-white/80 backdrop-blur-xl border-b border-gray-100">
-        <div className="max-w-7xl mx-auto flex items-center justify-between p-4 md:px-8">
-          <a href="#home" className="flex items-center group" aria-label="Gana Design Home">
-            <img src="/favicon.png" alt="Gana Design" className="h-10 w-auto" />
-            <span className="ml-3 font-black text-2xl tracking-tighter text-gray-900 uppercase">Gana Design</span>
+      <header className="fixed top-0 inset-x-0 z-[60] bg-white/95 backdrop-blur-xl border-b border-gray-100">
+        <div className="max-w-7xl mx-auto flex items-center justify-between p-3 md:p-4 md:px-8 px-4">
+          <a href="#home" className="flex items-center group shrink-0" aria-label="Gana Design Home">
+            <img src="/favicon.png" alt="Gana Design" className="h-8 md:h-10 w-auto mr-2 md:mr-3" />
+            <span className="font-black text-lg md:text-2xl tracking-tighter text-gray-900 uppercase">Gana Design</span>
           </a>
-          <nav className="hidden md:flex items-center space-x-10 font-bold text-xs uppercase tracking-widest text-gray-500">
-            <a href="#home" className="hover:text-[#ff5733] transition-colors">Trang chủ</a>
-            <a href="#logo-design" className="hover:text-[#ff5733] transition-colors">Dịch vụ</a>
-            <a href="#blog" className="hover:text-[#ff5733] transition-colors">Kiến thức</a>
-            <a href="#register" className="bg-gray-900 text-white px-8 py-3 rounded-full hover:bg-[#ff5733] transition-all transform hover:-translate-y-1 shadow-md">Liên hệ ngay</a>
+          <nav className="flex items-center space-x-3 md:space-x-10 font-bold uppercase tracking-widest text-gray-500 shrink-0">
+            <a href="#logo-design" className="text-[9px] md:text-xs hover:text-[#ff5733] transition-colors leading-none">Dịch vụ</a>
+            <a href="#register" className="bg-gray-900 text-white px-3 py-2 md:px-8 md:py-3 rounded-xl md:rounded-full hover:bg-[#ff5733] transition-all shadow-md text-[9px] md:text-xs leading-none">Liên hệ ngay</a>
           </nav>
         </div>
       </header>
@@ -161,8 +201,7 @@ function App() {
           {bannerImages.map((img, i) => (
             <SwiperSlide key={i}>
               <div className="relative w-full h-full">
-                {/* Ép nội dung banner sang trái cho Mobile */}
-                <SmartImage src={img} alt="Portfolio Banner Gana Design" className="w-full h-full object-cover object-[-150px_center] opacity-80" />
+                <SmartImage src={img} alt="Portfolio Banner Gana Design" className="w-full h-full object-cover object-[-150px_center] md:object-center opacity-80" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
               </div>
             </SwiperSlide>
@@ -175,7 +214,7 @@ function App() {
           {[
             { label: "Dự án đã thực hiện", value: "1000+" },
             { label: "Khách hàng tin chọn", value: "500+" },
-            { label: "Năm trong nghề", value: "10+" },
+            { label: "Năm trong nghề", value: "05+" },
             { label: "Đánh giá hài lòng", value: "99%" }
           ].map((stat, i) => (
             <div key={i} className="group">
@@ -228,8 +267,8 @@ function App() {
       <section id="register" className="py-24 max-w-6xl mx-auto px-4">
         <div className="bg-[#ff5733] p-12 md:p-20 rounded-[3rem] text-white shadow-2xl relative overflow-hidden">
           <div className="relative z-10 max-w-2xl mx-auto text-center">
-            <h2 className="text-5xl font-black mb-8 uppercase tracking-tighter leading-none">Bắt đầu câu chuyện của bạn</h2>
-            <p className="text-orange-100 mb-10 font-medium">Để lại thông tin, Gana sẽ liên hệ tư vấn trong vòng 15 phút.</p>
+            <h2 className="text-5xl md:text-6xl font-black mb-8 uppercase tracking-tighter leading-none">Khởi tạo thương hiệu</h2>
+            <p className="text-orange-100 mb-10 font-medium">Để lại thông tin, Gana Design sẽ liên hệ tư vấn trong vòng 15 phút.</p>
             <form className="grid grid-cols-1 md:grid-cols-2 gap-5" action="https://formspree.io/f/meorjqjg" method="POST">
               <input name="name" className="w-full p-5 rounded-2xl bg-white/10 border border-white/20 text-white placeholder:text-white/60 outline-none" placeholder="Họ tên*" required />
               <input name="phone" className="w-full p-5 rounded-2xl bg-white/10 border border-white/20 text-white placeholder:text-white/60 outline-none" placeholder="Số điện thoại*" required />
@@ -241,7 +280,7 @@ function App() {
 
       <footer className="bg-white py-12 border-t border-gray-100">
         <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-gray-400 text-[10px] font-bold uppercase tracking-[0.2em]">
-          <div>© 2026 GANADESIGN STUDIO - CREATIVE AGENCY</div>
+          <div>© 2024 GANA DESIGN - CREATIVE AGENCY</div>
         </div>
       </footer>
 
