@@ -25,7 +25,7 @@ export const bannersPostersStandeesImages = [
   "/posters/poster21.webp", "/posters/poster22.webp", "/posters/poster23.webp", "/posters/poster24.webp", "/posters/poster25.webp",
   "/posters/poster26.webp", "/posters/poster27.webp", "/posters/poster28.webp", "/posters/poster29.webp", "/posters/poster30.webp",
   "/posters/poster31.webp", "/posters/poster32.webp", "/posters/poster33.webp", "/posters/poster34.webp", "/posters/poster35.webp",
-  "/posters/poster36.webp", "/posters/poster37.webp"
+  "/posters/poster36.webp"
 ];
 
 export const cataloguesBrochuresImages = [
@@ -53,8 +53,7 @@ export const otherDesignsImages = [
   "/orther-designs/des16.webp", "/orther-designs/des17.webp", "/orther-designs/des18.webp", "/orther-designs/des19.webp", "/orther-designs/des20.webp",
   "/orther-designs/des21.webp", "/orther-designs/des22.webp", "/orther-designs/des23.webp", "/orther-designs/des24.webp", "/orther-designs/des25.webp",
   "/orther-designs/des26.webp", "/orther-designs/des27.webp", "/orther-designs/des28.webp", "/orther-designs/des29.webp", "/orther-designs/des30.webp",
-  "/orther-designs/des31.webp", "/orther-designs/des32.webp", "/orther-designs/des33.webp", "/orther-designs/des34.webp", "/orther-designs/des35.webp",
-  "/orther-designs/des36.webp", "/orther-designs/des37.webp", "/orther-designs/des38.webp"
+  "/orther-designs/des31.webp", "/orther-designs/des32.webp", "/orther-designs/des33.webp", "/orther-designs/des34.webp", "/orther-designs/des35.webp"
 ];
 
 export const blogArticles = [

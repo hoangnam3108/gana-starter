@@ -58,13 +58,15 @@ function ImageModal({ modalData, onClose }) {
 
   return (
     <motion.div 
-      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      initial={{ opacity: 0 }} 
+      animate={{ opacity: 1 }} 
+      exit={{ opacity: 0 }}
       className="fixed inset-0 bg-white/98 flex items-center justify-center z-[100] backdrop-blur-xl" 
       onClick={onClose}
     >
       <button 
         onClick={onClose} 
-        className="absolute top-6 right-6 text-gray-900 hover:text-[#ff5733] p-2 z-[110] transition-all active:scale-90"
+        className="absolute top-6 right-6 text-gray-900 hover:text-[#ff5733] p-2 z-[120] transition-all active:scale-90"
       >
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
@@ -89,14 +91,24 @@ function ImageModal({ modalData, onClose }) {
           slidesPerView={1} 
           loop={true}
           className="w-full h-full"
+          onClick={onClose}
         >
           {images.map((img, i) => (
-            <SwiperSlide key={i} className="flex items-center justify-center w-full h-full px-4">
-              <img 
-                src={img} 
-                alt="Full View" 
-                className="max-w-full max-h-[80vh] object-contain shadow-2xl rounded-lg pointer-events-none select-none" 
-              />
+            <SwiperSlide 
+              key={i} 
+              className="flex items-center justify-center w-full h-full px-4"
+              onClick={onClose}
+            >
+              <div 
+                className="relative max-w-full max-h-[80vh] flex items-center justify-center"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <img 
+                  src={img} 
+                  alt="Full View" 
+                  className="max-w-full max-h-[80vh] object-contain shadow-2xl rounded-lg pointer-events-none select-none" 
+                />
+              </div>
             </SwiperSlide>
           ))}
         </Swiper>
@@ -105,7 +117,9 @@ function ImageModal({ modalData, onClose }) {
           <div className="bg-gray-900 text-white px-5 py-1.5 rounded-full text-xs font-black tracking-widest shadow-lg">
             {currentIndex} / {images.length}
           </div>
-          <p className="text-gray-400 text-[10px] uppercase tracking-[0.3em] font-bold animate-pulse">Vuốt dọc để thoát</p>
+          <p className="text-gray-400 text-[10px] uppercase tracking-[0.3em] font-bold animate-pulse">
+            Chạm vùng trống hoặc vuốt dọc để thoát
+          </p>
         </div>
       </motion.div>
     </motion.div>
@@ -181,7 +195,7 @@ function App() {
             <span className="font-black text-xl md:text-2xl tracking-tighter text-gray-900 uppercase">Gana Design</span>
           </a>
           <nav className="flex items-center space-x-4 md:space-x-10 font-bold uppercase tracking-widest text-gray-500">
-            <a href="#logo-design" className="text-[10px] md:text-xs hover:text-[#ff5733] transition-colors">Dự án</a>
+            <a href="#logo-design" className="text-[10px] md:text-xs hover:text-[#ff5733] transition-colors">Dịch vụ</a>
             <a href="#register" className="bg-gray-900 text-white px-5 py-2.5 md:px-8 md:py-3 rounded-full hover:bg-[#ff5733] transition-all shadow-lg text-[10px] md:text-xs">Liên hệ</a>
           </nav>
         </div>
@@ -259,9 +273,19 @@ function App() {
       </footer>
 
       <div className="fixed bottom-10 right-8 z-[90] flex flex-col space-y-4 scale-90 md:scale-100">
-        <a href="tel:0902979699" className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all"><svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.1 15.1 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.27c1.12.45 2.33.69 3.58.69a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.24 2.46.69 3.57a1 1 0 01-.27 1.11z" /></svg></a>
-        <a href="https://zalo.me/0902979699" target="_blank" rel="noreferrer" className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all border border-blue-50"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo" className="w-10 h-10" /></a>
-        <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="w-16 h-16 bg-black text-white rounded-full flex items-center justify-center shadow-2xl hover:bg-[#ff5733] transition-all"><svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 15l7-7 7 7" /></svg></button>
+        <a href="tel:0902979699" className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all">
+          <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.1 15.1 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.27c1.12.45 2.33.69 3.58.69a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.24 2.46.69 3.57a1 1 0 01-.27 1.11z" /></svg>
+        </a>
+        <a href="https://zalo.me/0902979699" target="_blank" rel="noreferrer" className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all border border-blue-50">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo" className="w-10 h-10" />
+        </a>
+        {/* Đã khôi phục nút Facebook Fanpage của bạn ở đây */}
+        <a href="https://www.facebook.com/gana.agency" target="_blank" rel="noreferrer" className="w-16 h-16 bg-[#1877F2] rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all">
+          <svg className="w-9 h-9 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="w-16 h-16 bg-black text-white rounded-full flex items-center justify-center shadow-2xl hover:bg-[#ff5733] transition-all">
+          <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 15l7-7 7 7" /></svg>
+        </button>
       </div>
 
       <AnimatePresence>
