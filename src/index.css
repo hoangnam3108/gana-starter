@@ -15,17 +15,16 @@ body {
   100% { transform: translateX(-100%); }
 }
 .animate-marquee {
-  animation: marquee 40s linear infinite;
+  animation: marquee 60s linear infinite;
   will-change: transform;
 }
 
 @keyframes slowZoom {
   0% { transform: scale(1); }
-  100% { transform: scale(1.1); }
+  100% { transform: scale(1.05); }
 }
 .animate-slowZoom {
-  animation: slowZoom 12s ease-in-out infinite alternate;
-  will-change: transform;
+  animation: slowZoom 15s ease-in-out infinite alternate;
 }
 
 @keyframes bounce-slow {
@@ -36,21 +35,64 @@ body {
   animation: bounce-slow 3s infinite;
 }
 
-.swiper-button-next, .swiper-button-prev {
-  background: #ff5733 !important;
-  color: white !important;
-  width: 44px !important;
-  height: 44px !important;
-  border-radius: 50% !important;
-  border: 3px solid white !important;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15) !important;
-}
-.swiper-button-next:after, .swiper-button-prev:after {
-  font-size: 16px !important;
-  font-weight: 900 !important;
+/* Chỉ áp dụng hiệu ứng Blur khi có chuột (Desktop) */
+@media (hover: hover) {
+  section:hover .swiper-slide:not(:hover) {
+    filter: blur(0.8px) opacity(0.7);
+    transition: all 0.5s ease;
+  }
 }
 
-section:hover .swiper-slide:not(:hover) {
-  filter: blur(1px) grayscale(10%) opacity(0.7);
-  transition: all 0.5s ease;
+/* Custom Swiper Navigation */
+.swiper-button-next, .swiper-button-prev {
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: #1a1a1a !important;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+  transition: all 0.3s ease !important;
+}
+
+.swiper-button-next:after, .swiper-button-prev:after {
+  font-size: 14px !important;
+}
+
+@media (max-width: 768px) {
+  .swiper-button-next, .swiper-button-prev { display: none !important; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.animate-shimmer {
+  animation: shimmer 1.5s infinite linear;
+}
+
+.marquee-text-fill {
+  color: #ff5733; /* Màu cam thương hiệu */
+  opacity: 0.15; /* Để độ mờ thấp để làm nền sang trọng, không bị chói */
+  font-weight: 900;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Thẻ H1 ẩn cho SEO */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Hiệu ứng Marquee Fill màu */
+.marquee-text-fill {
+  color: #ff5733;
+  opacity: 0.15;
+  font-weight: 900;
 }
