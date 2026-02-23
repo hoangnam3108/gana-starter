@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, Keyboard } from "swiper/modules"; 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -45,9 +45,14 @@ function SmartImage({ src, alt, className }) {
   );
 }
 
+// MODAL MỚI: Thêm tính năng vuốt xuống để thoát
 function ImageModal({ modalData, onClose }) {
   if (!modalData) return null;
   const { images, initialIndex } = modalData;
+
+  const dragY = useMotionValue(0);
+  const opacity = useTransform(dragY, [0, 200], [1, 0]);
+  const scale = useTransform(dragY, [0, 200], [1, 0.9]);
 
   return (
     <motion.div 
@@ -55,21 +60,32 @@ function ImageModal({ modalData, onClose }) {
       className="fixed inset-0 bg-black/98 flex items-center justify-center z-[100] p-4 backdrop-blur-md" 
       onClick={onClose}
     >
-      <div className="relative w-full max-w-5xl h-[85vh] flex justify-center items-center" onClick={(e) => e.stopPropagation()}>
+      <motion.div 
+        style={{ y: dragY, opacity, scale }}
+        drag="y"
+        dragConstraints={{ top: 0, bottom: 0 }}
+        onDragEnd={(e, info) => info.offset.y > 100 && onClose()}
+        className="relative w-full max-w-5xl h-[85vh] flex justify-center items-center touch-none" 
+        onClick={(e) => e.stopPropagation()}
+      >
         <Swiper modules={[Navigation, Keyboard]} initialSlide={initialIndex} navigation keyboard={{ enabled: true }} spaceBetween={10} slidesPerView={1} className="w-full h-full">
           {images.map((img, i) => (
-            <SwiperSlide key={i} className="flex items-center justify-center">
-              <img src={img} alt="Full View Portfolio" className="max-w-full max-h-full object-contain" />
+            <SwiperSlide key={i} className="flex items-center justify-center pointer-events-none">
+              <img src={img} alt="Full View Portfolio" className="max-w-full max-h-full object-contain pointer-events-auto" />
             </SwiperSlide>
           ))}
         </Swiper>
-        <button onClick={onClose} className="absolute top-4 right-4 text-white/50 hover:text-[#ff5733] text-5xl transition-colors">✕</button>
-      </div>
+        <button onClick={onClose} className="absolute top-4 right-4 text-white/50 hover:text-[#ff5733] text-5xl transition-colors z-[110]">✕</button>
+        <div className="absolute -bottom-10 left-0 right-0 text-center text-white/30 text-[10px] uppercase tracking-widest">Vuốt xuống để thoát</div>
+      </motion.div>
     </motion.div>
   );
 }
 
 function ServiceSlider({ title, description, images, id, openModal, lightBg = true }) {
+  // GIỚI HẠN ẢNH: Chỉ load 12 ảnh đầu tiên để cứu RAM cho iPhone
+  const displayImages = images.slice(0, 12);
+
   return (
     <motion.section 
       id={id} 
@@ -94,7 +110,7 @@ function ServiceSlider({ title, description, images, id, openModal, lightBg = tr
           breakpoints={{ 640: { slidesPerView: 3 }, 1024: { slidesPerView: 4, spaceBetween: 30 } }}
           className="pb-12 px-2"
         >
-          {images.map((img, i) => (
+          {displayImages.map((img, i) => (
             <SwiperSlide key={i}>
               <motion.div 
                 whileHover={{ y: -15 }}
@@ -123,10 +139,8 @@ function App() {
 
   return (
     <div className="font-sans text-gray-900 selection:bg-[#ff5733] selection:text-white overflow-x-hidden antialiased">
-      {/* SEO: Thẻ H1 ẩn cho từ khóa chính */}
       <h1 className="sr-only">Gana Design - Dịch vụ thiết kế Logo và Bộ nhận diện thương hiệu chuyên nghiệp</h1>
 
-      {/* Header */}
       <header className="fixed top-0 inset-x-0 z-[60] bg-white/80 backdrop-blur-xl border-b border-gray-100">
         <div className="max-w-7xl mx-auto flex items-center justify-between p-4 md:px-8">
           <a href="#home" className="flex items-center group" aria-label="Gana Design Home">
@@ -142,13 +156,13 @@ function App() {
         </div>
       </header>
 
-      {/* Hero */}
       <section id="home" className="relative h-[70vh] md:h-[85vh] overflow-hidden bg-black pt-20">
         <Swiper modules={[Autoplay, Navigation]} navigation autoplay={{ delay: 7000 }} loop className="h-full w-full">
           {bannerImages.map((img, i) => (
             <SwiperSlide key={i}>
               <div className="relative w-full h-full">
-                <SmartImage src={img} alt="Portfolio Banner Gana Design" className="w-full h-full object-cover opacity-80" />
+                {/* Ép nội dung banner sang trái cho Mobile */}
+                <SmartImage src={img} alt="Portfolio Banner Gana Design" className="w-full h-full object-cover object-[-150px_center] opacity-80" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
               </div>
             </SwiperSlide>
@@ -156,7 +170,6 @@ function App() {
         </Swiper>
       </section>
 
-      {/* Stats */}
       <section className="py-24 bg-gray-900 text-white">
         <div className="max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
           {[
@@ -173,58 +186,20 @@ function App() {
         </div>
       </section>
 
-      {/* Sliders with SEO Content */}
-      <ServiceSlider 
-        title="Thiết kế Logo" 
-        id="logo-design" 
-        description="Chúng tôi sáng tạo những biểu tượng độc bản, giúp thương hiệu của bạn khắc sâu vào tâm trí khách hàng ngay từ cái nhìn đầu tiên."
-        images={logoImages} 
-        openModal={(imgs, idx) => setModalData({images: imgs, initialIndex: idx})} 
-        lightBg={true} 
-      />
-      <ServiceSlider 
-        title="Banner & Poster" 
-        id="banners-posters" 
-        description="Giải pháp thiết kế quảng cáo chuyên nghiệp trên đa nền tảng, từ digital đến ấn phẩm in ấn khổ lớn."
-        images={bannersPostersStandeesImages} 
-        openModal={(imgs, idx) => setModalData({images: imgs, initialIndex: idx})} 
-        lightBg={false} 
-      />
-      <ServiceSlider 
-        title="Catalogue & Profile" 
-        id="catalogues-brochures" 
-        description="Xây dựng hồ sơ năng lực doanh nghiệp và danh mục sản phẩm ấn tượng, gia tăng uy tín trong mắt đối tác."
-        images={cataloguesBrochuresImages} 
-        openModal={(imgs, idx) => setModalData({images: imgs, initialIndex: idx})} 
-        lightBg={true} 
-      />
-      <ServiceSlider 
-        title="Thiết kế Bao bì" 
-        id="packaging-design" 
-        description="Bao bì không chỉ để bảo vệ, mà còn là công cụ kể câu chuyện thương hiệu và thúc đẩy doanh số bán hàng."
-        images={packagingDesignImages} 
-        openModal={(imgs, idx) => setModalData({images: imgs, initialIndex: idx})} 
-        lightBg={false} 
-      />
-      <ServiceSlider 
-        title="Dịch vụ khác" 
-        id="other-designs" 
-        description="Từ danh thiếp đến bộ văn phòng, chúng tôi đáp ứng mọi nhu cầu đồ họa sáng tạo cho doanh nghiệp của bạn."
-        images={otherDesignsImages} 
-        openModal={(imgs, idx) => setModalData({images: imgs, initialIndex: idx})} 
-        lightBg={true} 
-      />
+      <ServiceSlider title="Thiết kế Logo" id="logo-design" description="Chúng tôi sáng tạo những biểu tượng độc bản, giúp thương hiệu của bạn khắc sâu vào tâm trí khách hàng ngay từ cái nhìn đầu tiên." images={logoImages} openModal={(imgs, idx) => setModalData({images: imgs, initialIndex: idx})} lightBg={true} />
+      <ServiceSlider title="Banner & Poster" id="banners-posters" description="Giải pháp thiết kế quảng cáo chuyên nghiệp trên đa nền tảng, từ digital đến ấn phẩm in ấn khổ lớn." images={bannersPostersStandeesImages} openModal={(imgs, idx) => setModalData({images: imgs, initialIndex: idx})} lightBg={false} />
+      <ServiceSlider title="Catalogue & Profile" id="catalogues-brochures" description="Xây dựng hồ sơ năng lực doanh nghiệp và danh mục sản phẩm ấn tượng, gia tăng uy tín trong mắt đối tác." images={cataloguesBrochuresImages} openModal={(imgs, idx) => setModalData({images: imgs, initialIndex: idx})} lightBg={true} />
+      <ServiceSlider title="Thiết kế Bao bì" id="packaging-design" description="Bao bì không chỉ để bảo vệ, mà còn là công cụ kể câu chuyện thương hiệu và thúc đẩy doanh số bán hàng." images={packagingDesignImages} openModal={(imgs, idx) => setModalData({images: imgs, initialIndex: idx})} lightBg={false} />
+      <ServiceSlider title="Dịch vụ khác" id="other-designs" description="Từ danh thiếp đến bộ văn phòng, chúng tôi đáp ứng mọi nhu cầu đồ họa sáng tạo cho doanh nghiệp của bạn." images={otherDesignsImages} openModal={(imgs, idx) => setModalData({images: imgs, initialIndex: idx})} lightBg={true} />
 
-      {/* Marquee UI */}
-      <div className="py-24 bg-white overflow-hidden border-y border-gray-100 flex items-center">
-        <div className="flex animate-marquee whitespace-nowrap space-x-32">
+      <div className="py-24 bg-white overflow-hidden border-y border-gray-100 flex items-center text-gray-200 font-black text-6xl md:text-8xl">
+        <div className="flex animate-marquee whitespace-nowrap space-x-32 uppercase opacity-10">
           {["THIẾT KẾ ĐỘC QUYỀN", "NÂNG TẦM THƯƠNG HIỆU", "GIẢI PHÁP SÁNG TẠO", "ĐỒNG HÀNH PHÁT TRIỂN"].map((t, i) => (
-            <span key={i} className="text-6xl md:text-8xl font-black tracking-tighter uppercase marquee-text-fill">{t}</span>
+            <span key={i}>{t}</span>
           ))}
         </div>
       </div>
 
-      {/* Blog/News */}
       <section id="blog" className="py-24 bg-gray-50">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex flex-col items-center mb-16 text-center">
@@ -250,44 +225,37 @@ function App() {
         </div>
       </section>
 
-      {/* Contact Form */}
       <section id="register" className="py-24 max-w-6xl mx-auto px-4">
         <div className="bg-[#ff5733] p-12 md:p-20 rounded-[3rem] text-white shadow-2xl relative overflow-hidden">
           <div className="relative z-10 max-w-2xl mx-auto text-center">
             <h2 className="text-5xl font-black mb-8 uppercase tracking-tighter leading-none">Bắt đầu câu chuyện của bạn</h2>
             <p className="text-orange-100 mb-10 font-medium">Để lại thông tin, Gana sẽ liên hệ tư vấn trong vòng 15 phút.</p>
             <form className="grid grid-cols-1 md:grid-cols-2 gap-5" action="https://formspree.io/f/meorjqjg" method="POST">
-              <input name="name" className="w-full p-5 rounded-2xl bg-white/10 border border-white/20 text-white placeholder:text-white/60 outline-none focus:bg-white/20 transition-all" placeholder="Họ tên*" required aria-label="Họ tên" />
-              <input name="phone" className="w-full p-5 rounded-2xl bg-white/10 border border-white/20 text-white placeholder:text-white/60 outline-none focus:bg-white/20 transition-all" placeholder="Số điện thoại*" required aria-label="Số điện thoại" />
-              <button className="md:col-span-2 py-6 bg-gray-900 text-white font-black rounded-2xl hover:bg-black hover:-translate-y-1 transition-all uppercase tracking-widest shadow-xl">Gửi yêu cầu tư vấn</button>
+              <input name="name" className="w-full p-5 rounded-2xl bg-white/10 border border-white/20 text-white placeholder:text-white/60 outline-none" placeholder="Họ tên*" required />
+              <input name="phone" className="w-full p-5 rounded-2xl bg-white/10 border border-white/20 text-white placeholder:text-white/60 outline-none" placeholder="Số điện thoại*" required />
+              <button className="md:col-span-2 py-6 bg-gray-900 text-white font-black rounded-2xl hover:bg-black transition-all uppercase tracking-widest shadow-xl">Gửi yêu cầu tư vấn</button>
             </form>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="bg-white py-12 border-t border-gray-100">
         <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-gray-400 text-[10px] font-bold uppercase tracking-[0.2em]">
           <div>© 2026 GANADESIGN STUDIO - CREATIVE AGENCY</div>
-          <div className="flex space-x-8 mt-4 md:mt-0">
-            <a href="#" className="hover:text-black transition-colors">Thiết kế Logo</a>
-            <a href="#" className="hover:text-black transition-colors">Bao bì</a>
-          </div>
         </div>
       </footer>
 
-      {/* Floating UI */}
       <div className="fixed bottom-10 right-8 z-[90] flex flex-col space-y-4 scale-90 md:scale-100">
-        <a href="tel:0902979699" className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all animate-bounce-slow" aria-label="Gọi điện thoại">
+        <a href="tel:0902979699" className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all" aria-label="Gọi điện thoại">
           <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.1 15.1 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.27c1.12.45 2.33.69 3.58.69a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.24 2.46.69 3.57a1 1 0 01-.27 1.11z" /></svg>
         </a>
         <a href="https://zalo.me/0902979699" target="_blank" rel="noopener noreferrer" className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all border border-blue-50">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo Gana Design" className="w-10 h-10" />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo" className="w-10 h-10" />
         </a>
         <a href="https://www.facebook.com/gana.agency" target="_blank" rel="noopener noreferrer" className="w-16 h-16 bg-[#1877F2] rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all">
           <svg className="w-9 h-9 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
         </a>
-        <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="w-16 h-16 bg-black text-white rounded-full flex items-center justify-center shadow-2xl hover:bg-[#ff5733] hover:scale-110 active:scale-95 transition-all">
+        <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="w-16 h-16 bg-black text-white rounded-full flex items-center justify-center shadow-2xl hover:bg-[#ff5733] hover:scale-110 transition-all">
           <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 15l7-7 7 7" /></svg>
         </button>
       </div>
